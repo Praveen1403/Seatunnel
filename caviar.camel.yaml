@@ -1,0 +1,44 @@
+- route:
+    id: route-780b
+    nodePrefixId: route-d43
+    from:
+      id: from-ffc6
+      uri: kamelet:mysql-source
+      parameters:
+        serverName: localhost
+        serverPort: '3306'
+        username: root
+        password: sql@12345
+        query: select Player,Speciality from Cricket_Data
+        databaseName: test
+      steps:
+        - multicast:
+            id: multicast-d184
+            parallelProcessing: true
+            synchronous: true
+            streaming: true
+            steps:
+              - to:
+                  id: to-0943
+                  uri: kamelet:mask-field-action
+                  parameters:
+                    fields: Speciality
+                    replacement: xxxxx
+              - log:
+                  id: log-5362
+                  message: ${body}
+        - log:
+            id: log-6b71
+            message: ${body}
+        - to:
+            id: to-0155
+            uri: kamelet:mysql-sink
+            parameters:
+              serverName: localhost
+              serverPort: '3306'
+              username: root
+              password: sql@12345
+              query: >-
+                INSERT INTO output_cric (Player,Speciality) VALUES
+                (:#Player,:#Speciality)
+              databaseName: test
