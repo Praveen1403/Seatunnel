@@ -1,0 +1,17 @@
+- route:
+    id: route-67b9
+    nodePrefixId: route-385
+    from:
+      id: from-c1de
+      uri: kamelet:mysql-source
+      parameters:
+        serverName: localhost
+        serverPort: '3306'
+        username: root
+        password: sql@12345
+        query: select Player,Speciality from cricket data
+        databaseName: test
+      steps:
+        - log:
+            id: log-adb7
+            message: ${body}
